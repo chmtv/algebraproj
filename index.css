@@ -1,0 +1,30 @@
+:root {
+    --bg-col: #323232;
+    --font-col: #aeaeae;
+    --input-bg-col: #424242;
+}
+body {
+    background-color: var(--bg-col);
+    color: var(--font-col);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+#title {
+    font-size: 1.7em;
+    text-align: center;
+}
+input {
+    background-color: var(--input-bg-col);
+    border: none;
+    color: var(--font-col);
+}
+/* Hide the input controls (the up and down arrow) */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] { 
+    -moz-appearance: textfield;
+    appearance: textfield;
+    margin: 0; 
+}

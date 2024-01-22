@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra liniowa - Projekt</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="./triangles.js"></script>
+</head>
+<body>
+    <header id="title">Algebra liniowa - Projekt - Trójkąty i czworościany</header>
+    <section id="triangles">
+        <header>Trójkąty</header>
+        <section className="coordinate">
+            <label for="">Współrzędna A: </label>
+            <input type="number" placeholder="x" name="triangleCoord1X" />
+            <input type="number" placeholder="y" name="triangleCoord1Y" />
+            <input type="number" placeholder="z" name="triangleCoord1Z" />
+        </section>
+        <section className="coordinate">
+            <label for="">Współrzędna B: </label>
+            <input type="number" placeholder="x" name="triangleCoord2X" />
+            <input type="number" placeholder="y" name="triangleCoord2Y" />
+            <input type="number" placeholder="z" name="triangleCoord2Z" />
+        </section>
+        <section className="coordinate">
+            <label for="">Współrzędna C: </label>
+            <input type="number" placeholder="x" name="triangleCoord3X" />
+            <input type="number" placeholder="y" name="triangleCoord3Y" />
+            <input type="number" placeholder="z" name="triangleCoord3Z" />
+        </section>
+        
+        <input type="button" value="Pokaż obliczenia" onClick="handleTriangleCoordsSubmit()"/>
+        <section id="trianglesMsg"></section>
+        <section id="triangleSideLengths"></section>
+        <section id="triangleArea"></section>
+        <section id="triangleAngles"></section>
+        <section id="triangleHeights"></section>
+    </section>
+    
+</body>
+</html>
