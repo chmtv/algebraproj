@@ -221,15 +221,15 @@ function handleTriangleCoordsSubmit() {
             );
         document.getElementById("tetraVolume").innerHTML = `Objętość: ${volume.toFixed(2)}`;
         // Heights
-        let tetraHeight = volume / 1/3 * baseArea;
+        let tetraHeight = volume / ((1/3) * baseArea);
         document.getElementById("tetraHeight").innerHTML = `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec1)}: ${tetraHeight.toFixed(2)} </br>`;
         
-        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(vec1, vec3, vec4);
+        tetraHeight = volume / ((1/3) * triangleAreaFromPointsR3(vec1, vec3, vec4));
         document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec2)}: ${tetraHeight.toFixed(2)} </br>`;
 
-        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(vec2, vec3, vec4);
-        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec1)}: ${tetraHeight.toFixed(2)} </br>`;
-
-        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(vec1, vec2, vec4);
+        tetraHeight = volume / ((1/3) * triangleAreaFromPointsR3(vec1, vec2, vec4));
         document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec3)}: ${tetraHeight.toFixed(2)} </br>`;
+
+        tetraHeight = volume / ((1/3) * triangleAreaFromPointsR3(vec1, vec2, vec3));
+        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec4)}: ${tetraHeight.toFixed(2)} </br>`;
         }
