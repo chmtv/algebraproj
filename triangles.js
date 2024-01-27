@@ -93,7 +93,10 @@ function handleTriangleCoordsSubmit() {
 
     let resultHTML = ""
     // Check if a triangle can be made
-    if(AreColinear(vec1,vec2) && AreColinear(vec2,vec3) && AreColinear(vec1,vec3)) {
+    if(
+        // AreColinear(vec1,vec2) && AreColinear(vec2,vec3) && AreColinear(vec1,vec3)
+        triangleAreaFromPointsR3(vec1,vec2,vec3) == 0
+        ) {
         resultHTML = "Podane współrzędne są współliniowe, nie można stworzyć z nich trójkąta";
     }
     else {
@@ -217,7 +220,7 @@ function handleTriangleCoordsSubmit() {
         let sideArea3 = triangleAreaFromPointsR3(tetraBaseVecs[1],tetraBaseVecs[2],nonCoplanarVec);
         let baseArea = triangleAreaFromPointsR3(...tetraBaseVecs);
         let totalArea = sideArea1 + sideArea2 + sideArea3 + baseArea;
-        document.getElementById("tetraArea").innerHTML = `Pole powierzchni całkowitej: ${totalArea}`;
+        document.getElementById("tetraArea").innerHTML = `Pole powierzchni całkowitej: ${totalArea.toFixed(2)}`;
         // Volume
         let a = vectorBtwnPointsR3(tetraBaseVecs[0], tetraBaseVecs[1]);
         let b = vectorBtwnPointsR3(tetraBaseVecs[0], tetraBaseVecs[2]);
@@ -225,7 +228,7 @@ function handleTriangleCoordsSubmit() {
         let volume = 1/6 * Math.abs(
              DotProductR3(CrossProductR3(a,b), c)
             );
-        document.getElementById("tetraVolume").innerHTML = `Objętość: ${volume}`;
+        document.getElementById("tetraVolume").innerHTML = `Objętość: ${volume.toFixed(2)}`;
         // Height
         let tetraHeight = volume / 1/3 * baseArea;
         document.getElementById("tetraHeight").innerHTML = `Wysokość czworościanu: ${tetraHeight}`;
