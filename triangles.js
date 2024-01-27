@@ -93,11 +93,21 @@ function handleTriangleCoordsSubmit() {
 
     let resultHTML = ""
     // Check if a triangle can be made
+    
+    /*
     if(
         // AreColinear(vec1,vec2) && AreColinear(vec2,vec3) && AreColinear(vec1,vec3)
         triangleAreaFromPointsR3(vec1,vec2,vec3) == 0
         ) {
         resultHTML = "Podane współrzędne są współliniowe, nie można stworzyć z nich trójkąta";
+    }
+    */
+    if(AreColinear(new PointR3(vec2.x-vec1.x,vec2.y-vec1.z,vec2.y-vec1.z),new PointR3(vec3.x-vec2.x,vec3.y-vec2.z,vec3.y-vec2.z))) {
+        resultHTML = "Podane współrzędne są współliniowe, nie można stworzyć z nich trójkąta";
+        document.getElementById("triangleSideLengths").innerHTML = "";
+        document.getElementById("triangleArea").innerHTML = "";
+        document.getElementById("triangleAngles").innerHTML = "";
+        document.getElementById("triangleHeights").innerHTML = "";
     }
     else {
         resultMsg = "Poniżej wypisane są wartości pewnych parametrów trójkąta stworzonego z podanych punktów"
@@ -152,6 +162,9 @@ function handleTriangleCoordsSubmit() {
         let crossProduct = CrossProductR3(vectorBtwnPointsR3(vec1,vec2), vectorBtwnPointsR3(vec1,vec3));
         let dotProduct = DotProductR3(vectorBtwnPointsR3(vec1,vec4), crossProduct);
         return dotProduct == 0;
+    }
+    function formatPoint(p) {
+        return `(${p.x}, ${p.y}, ${p.z})`;
     }
     function handleTetraSubmit() {
         let x1 = getTetraCoordFromForm("1X");
@@ -229,7 +242,16 @@ function handleTriangleCoordsSubmit() {
              DotProductR3(CrossProductR3(a,b), c)
             );
         document.getElementById("tetraVolume").innerHTML = `Objętość: ${volume.toFixed(2)}`;
-        // Height
+        // Heights
         let tetraHeight = volume / 1/3 * baseArea;
-        document.getElementById("tetraHeight").innerHTML = `Wysokość czworościanu: ${tetraHeight}`;
+        document.getElementById("tetraHeight").innerHTML = `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(nonCoplanarVec)}: ${tetraHeight.toFixed(2)} </br>`;
+        
+        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(tetraBaseVecs[0], tetraBaseVecs[2], nonCoplanarVec);
+        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(tetraBaseVecs[1])}: ${tetraHeight.toFixed(2)} </br>`;
+
+        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(tetraBaseVecs[1], tetraBaseVecs[2], nonCoplanarVec);
+        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(tetraBaseVecs[0])}: ${tetraHeight.toFixed(2)} </br>`;
+
+        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(tetraBaseVecs[0], tetraBaseVecs[1], nonCoplanarVec);
+        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(tetraBaseVecs[2])}: ${tetraHeight.toFixed(2)} </br>`;
         }
