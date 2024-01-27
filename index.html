@@ -8,9 +8,11 @@
     <script src="./triangles.js"></script>
 </head>
 <body>
+    
     <header id="title">Algebra liniowa - Projekt - Trójkąty i czworościany</header>
+    <main>
     <section id="triangles">
-        <header>Trójkąty</header>
+        <h2>Trójkąt</h2>
         <section className="coordinate">
             <label for="">Współrzędna A: </label>
             <input type="number" placeholder="x" name="triangleCoord1X" />
@@ -37,6 +39,40 @@
         <section id="triangleAngles"></section>
         <section id="triangleHeights"></section>
     </section>
-    
+    <section id="tetrahedron">
+        <h2>Czworościan</h2>
+        <section>
+            <section className="coordinate">
+                <label for="">Współrzędna A: </label>
+                <input type="number" placeholder="x" name="tetraCoord1X" />
+                <input type="number" placeholder="y" name="tetraCoord1Y" />
+                <input type="number" placeholder="z" name="tetraCoord1Z" />
+            </section>
+            <section className="coordinate">
+                <label for="">Współrzędna B: </label>
+                <input type="number" placeholder="x" name="tetraCoord2X" />
+                <input type="number" placeholder="y" name="tetraCoord2Y" />
+                <input type="number" placeholder="z" name="tetraCoord2Z" />
+            </section>
+            <section className="coordinate">
+                <label for="">Współrzędna C: </label>
+                <input type="number" placeholder="x" name="tetraCoord3X" />
+                <input type="number" placeholder="y" name="tetraCoord3Y" />
+                <input type="number" placeholder="z" name="tetraCoord3Z" />
+            </section>
+            <section className="coordinate">
+                <label for="">Współrzędna D: </label>
+                <input type="number" placeholder="x" name="tetraCoord4X" />
+                <input type="number" placeholder="y" name="tetraCoord4Y" />
+                <input type="number" placeholder="z" name="tetraCoord4Z" />
+            </section>
+        </section>
+        <input type="button" value="Pokaż obliczenia" onClick="handleTetraSubmit()"/>
+        <section id="tetraMsg"></section>
+        <section id="tetraArea"></section>
+        <section id="tetraVolume"></section>
+        <section id="tetraHeight"></section>
+    </section>
+</main>
 </body>
 </html>
