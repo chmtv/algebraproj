@@ -93,15 +93,6 @@ function handleTriangleCoordsSubmit() {
 
     let resultHTML = ""
     // Check if a triangle can be made
-    
-    /*
-    if(
-        // AreColinear(vec1,vec2) && AreColinear(vec2,vec3) && AreColinear(vec1,vec3)
-        triangleAreaFromPointsR3(vec1,vec2,vec3) == 0
-        ) {
-        resultHTML = "Podane współrzędne są współliniowe, nie można stworzyć z nich trójkąta";
-    }
-    */
     if(AreColinear(new PointR3(vec2.x-vec1.x,vec2.y-vec1.z,vec2.y-vec1.z),new PointR3(vec3.x-vec2.x,vec3.y-vec2.z,vec3.y-vec2.z))) {
         resultHTML = "Podane współrzędne są współliniowe, nie można stworzyć z nich trójkąta";
         document.getElementById("triangleSideLengths").innerHTML = "";
@@ -166,6 +157,9 @@ function handleTriangleCoordsSubmit() {
     function formatPoint(p) {
         return `(${p.x}, ${p.y}, ${p.z})`;
     }
+    function canMakeTriangle(vec1,vec2,vec3) {
+        return AreColinear(new PointR3(vec2.x-vec1.x,vec2.y-vec1.z,vec2.y-vec1.z),new PointR3(vec3.x-vec2.x,vec3.y-vec2.z,vec3.y-vec2.z))
+    }
     function handleTetraSubmit() {
         let x1 = getTetraCoordFromForm("1X");
         let y1 = getTetraCoordFromForm("1Y");
@@ -188,36 +182,20 @@ function handleTriangleCoordsSubmit() {
         let vec4 = new PointR3(x4,y4,z4);
 
         let tetraVecs = [vec1,vec2,vec3,vec4];
-        let tetraBaseVecs = [];
         let nonCoplanarVec;
         let canMakeTetra = false;
-        for(let i = 0; i < tetraVecs.length; i++) {
-            vec = tetraVecs[i];
-            let vecsToCheck = [];
-            nonCoplanarVec = null;
-            for(let j = 0; j < tetraVecs.length; j++) {
-                
-                let _vec = tetraVecs[j];
-                // Add all the vectors that are not the currently checked one to an array to be checked later
-                if(i != j) {
-                    vecsToCheck.push(_vec);  
-                }
-                // Also set a variable of the other vector for later calculations
-                else {
-                    nonCoplanarVec = _vec;
-                }
-                // If there is a base and a non-coplanar vector set all the variables, in the other case say a message
-                if(vecsToCheck.length == 3 && nonCoplanarVec) {
-                    // Check if in the 4 vectors there are 3 that make a base (are coplanar) and if the other vector is not coplanar
-                    if(!AreCoplanarFourPoints(...vecsToCheck, nonCoplanarVec)) {
-                        tetraBaseVecs = vecsToCheck;
-                        canMakeTetra = true;
-                        break;
-                    }
-                }
-            }
-            if(canMakeTetra) break;
+        // Check if a triangle can be made from any three points that were given
+        if(canMakeTriangle(vec1,vec2,vec3)) canMakeTetra = true;
+        if(canMakeTriangle(vec1,vec2,vec4)) canMakeTetra = true;
+        if(canMakeTriangle(vec1,vec3,vec4)) canMakeTetra = true;
+        if(canMakeTriangle(vec2,vec3,vec4)) canMakeTetra = true;
+        if(!AreCoplanarFourPoints(...tetraVecs)) {
+            canMakeTetra = true;
         }
+        else {
+            canMakeTetra = false;
+        }
+                    
         if(!canMakeTetra) {
             document.getElementById("tetraMsg").innerHTML = "Wszystkie podane współrzędne są współpłaszczyznowe, nie można z nich utworzyć poprawnego czworościanu";
             document.getElementById("tetraArea").innerHTML = "";
@@ -228,30 +206,30 @@ function handleTriangleCoordsSubmit() {
         // The tetrahedron parameters calculations
         document.getElementById("tetraMsg").innerHTML = "Poniżej wypisane są wartości parametrów czworościanu utworzonego z podanych wierzchołków";
         // Area
-        let sideArea1 = triangleAreaFromPointsR3(tetraBaseVecs[0],tetraBaseVecs[2],nonCoplanarVec);
-        let sideArea2 = triangleAreaFromPointsR3(tetraBaseVecs[0],tetraBaseVecs[1],nonCoplanarVec);
-        let sideArea3 = triangleAreaFromPointsR3(tetraBaseVecs[1],tetraBaseVecs[2],nonCoplanarVec);
-        let baseArea = triangleAreaFromPointsR3(...tetraBaseVecs);
+        let sideArea1 = triangleAreaFromPointsR3(vec1,vec2,vec3);
+        let sideArea2 = triangleAreaFromPointsR3(vec1,vec2,vec4);
+        let sideArea3 = triangleAreaFromPointsR3(vec1,vec3,vec4);
+        let baseArea = triangleAreaFromPointsR3(vec2,vec3,vec4);
         let totalArea = sideArea1 + sideArea2 + sideArea3 + baseArea;
         document.getElementById("tetraArea").innerHTML = `Pole powierzchni całkowitej: ${totalArea.toFixed(2)}`;
         // Volume
-        let a = vectorBtwnPointsR3(tetraBaseVecs[0], tetraBaseVecs[1]);
-        let b = vectorBtwnPointsR3(tetraBaseVecs[0], tetraBaseVecs[2]);
-        let c = vectorBtwnPointsR3(tetraBaseVecs[0], nonCoplanarVec);
+        let a = vectorBtwnPointsR3(vec1, vec2);
+        let b = vectorBtwnPointsR3(vec1, vec3);
+        let c = vectorBtwnPointsR3(vec1, vec4);
         let volume = 1/6 * Math.abs(
              DotProductR3(CrossProductR3(a,b), c)
             );
         document.getElementById("tetraVolume").innerHTML = `Objętość: ${volume.toFixed(2)}`;
         // Heights
         let tetraHeight = volume / 1/3 * baseArea;
-        document.getElementById("tetraHeight").innerHTML = `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(nonCoplanarVec)}: ${tetraHeight.toFixed(2)} </br>`;
+        document.getElementById("tetraHeight").innerHTML = `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec1)}: ${tetraHeight.toFixed(2)} </br>`;
         
-        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(tetraBaseVecs[0], tetraBaseVecs[2], nonCoplanarVec);
-        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(tetraBaseVecs[1])}: ${tetraHeight.toFixed(2)} </br>`;
+        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(vec1, vec3, vec4);
+        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec2)}: ${tetraHeight.toFixed(2)} </br>`;
 
-        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(tetraBaseVecs[1], tetraBaseVecs[2], nonCoplanarVec);
-        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(tetraBaseVecs[0])}: ${tetraHeight.toFixed(2)} </br>`;
+        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(vec2, vec3, vec4);
+        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec1)}: ${tetraHeight.toFixed(2)} </br>`;
 
-        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(tetraBaseVecs[0], tetraBaseVecs[1], nonCoplanarVec);
-        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(tetraBaseVecs[2])}: ${tetraHeight.toFixed(2)} </br>`;
+        tetraHeight = volume / 1/3 * triangleAreaFromPointsR3(vec1, vec2, vec4);
+        document.getElementById("tetraHeight").innerHTML += `Wysokość czworościanu opuszczona z wierzchołka ${formatPoint(vec3)}: ${tetraHeight.toFixed(2)} </br>`;
         }
